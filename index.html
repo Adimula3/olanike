@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telescope</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            color: #000;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 40px 20px;
+        }
+
+        /* Center Text */
+        .hero-text {
+            text-align: center;
+            z-index: 100;
+            position: relative;
+            font-family: 'Dancing Script', cursive;
+        }
+
+        .hero-text h1 {
+            font-size: clamp(36px, 5vw, 60px);
+            font-weight: 400;
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
+
+        /* Floating Images */
+        .floating-images {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-img {
+            position: absolute;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        /* Image positioning - ONLY on outer edges, NO overlap with center text */
+        .img-1 {
+            top: 5%;
+            left: 5%;
+            width: 200px;
+            height: 150px;
+            z-index: 1;
+        }
+
+        .img-2 {
+            top: 18%;
+            left: 2%;
+            width: 180px;
+            height: 180px;
+            z-index: 1;
+        }
+
+        .img-3 {
+            top: 5%;
+            right: 5%;
+            width: 160px;
+            height: 130px;
+            z-index: 1;
+        }
+
+        .img-4 {
+            top: 2%;
+            right: 15%;
+            width: 140px;
+            height: 140px;
+            z-index: 1;
+        }
+
+        .img-5 {
+            top: 25%;
+            right: 2%;
+            width: 280px;
+            height: 250px;
+            z-index: 1;
+        }
+
+        .img-6 {
+            top: 35%;
+            left: 1%;
+            width: 150px;
+            height: 150px;
+            z-index: 1;
+        }
+
+        .img-7 {
+            bottom: 18%;
+            left: 8%;
+            width: 210px;
+            height: 210px;
+            z-index: 1;
+        }
+
+        .img-8 {
+            bottom: 20%;
+            left: 2%;
+            width: 160px;
+            height: 120px;
+            z-index: 1;
+        }
+
+        .img-9 {
+            bottom: 25%;
+            right: 2%;
+            width: 130px;
+            height: 95px;
+            z-index: 1;
+        }
+
+        .img-10 {
+            bottom: 8%;
+            right: 8%;
+            width: 280px;
+            height: 200px;
+            z-index: 1;
+        }
+
+        .img-11 {
+            bottom: 5%;
+            left: 25%;
+            width: 150px;
+            height: 110px;
+            z-index: 1;
+        }
+
+        .img-12 {
+            top: 45%;
+            left: 0%;
+            width: 120px;
+            height: 170px;
+            z-index: 1;
+        }
+
+        .img-13 {
+            bottom: 2%;
+            right: 1%;
+            width: 85px;
+            height: 280px;
+            z-index: 1;
+        }
+
+        /* Bottom Navigation Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            border-radius: 50px;
+            padding: 12px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            z-index: 100;
+        }
+
+        .nav-button {
+            background: transparent;
+            border: 2px solid #000;
+            color: #000;
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .nav-button:hover {
+            background: #000;
+            color: #fff;
+        }
+
+        .nav-button.yes {
+            background: #000;
+            color: #fff;
+            flex-grow: 1;
+        }
+
+        .nav-button.no {
+            flex-grow: 1;
+        }
+
+        .nav-button.yes:hover {
+            background: #333;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-text h1 {
+                font-size: 32px;
+                padding: 0 20px;
+            }
+
+            /* Reduce image sizes for mobile */
+            .floating-img {
+                width: 80px !important;
+                height: 80px !important;
+            }
+
+            /* Reposition images for mobile - keep them on edges, away from center */
+            .img-1 {
+                top: 5%;
+                left: 2%;
+            }
+
+            .img-2 {
+                top: 12%;
+                left: 1%;
+            }
+
+            .img-3 {
+                top: 5%;
+                right: 2%;
+            }
+
+            .img-4 {
+                top: 2%;
+                right: 25%;
+            }
+
+            .img-5 {
+                top: 20%;
+                right: 1%;
+                width: 100px !important;
+                height: 100px !important;
+            }
+
+            .img-6 {
+                top: 35%;
+                left: 0%;
+            }
+
+            .img-7 {
+                bottom: 25%;
+                left: 2%;
+                width: 90px !important;
+                height: 90px !important;
+            }
+
+            .img-8 {
+                bottom: 30%;
+                left: 1%;
+            }
+
+            .img-9 {
+                bottom: 35%;
+                right: 1%;
+            }
+
+            .img-10 {
+                bottom: 15%;
+                right: 2%;
+                width: 100px !important;
+                height: 100px !important;
+            }
+
+            .img-11 {
+                bottom: 8%;
+                left: 2%;
+            }
+
+            .img-12 {
+                top: 45%;
+                left: 0%;
+                width: 70px !important;
+                height: 90px !important;
+            }
+
+            .img-13 {
+                bottom: 2%;
+                right: 0%;
+                width: 50px !important;
+                height: 120px !important;
+            }
+
+            /* Navbar adjustments for mobile */
+            .bottom-nav {
+                top: 20px;
+                bottom: auto;
+                padding: 10px 20px;
+                gap: 12px;
+                width: calc(100% - 40px);
+                max-width: 400px;
+            }
+
+            .nav-button {
+                padding: 8px 15px;
+                font-size: 10px;
+                flex: 1;
+                letter-spacing: 0.5px;
+            }
+
+            .nav-button.yes {
+                font-size: 10px;
+            }
+
+            .nav-button.no {
+                font-size: 9px;
+            }
+        }
+
+        /* Smooth animations on load */
+        @keyframes fadeInFloat {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .floating-img {
+            animation: fadeInFloat 1s ease-out;
+        }
+
+        .hero-text {
+            animation: fadeInFloat 1.2s ease-out;
+        }
+
+        /* YES button clicked animations */
+        @keyframes slideOutTop {
+            to {
+                transform: translateY(-150vh);
+                opacity: 0;
+            }
+        }
+
+        @keyframes slideOutBottom {
+            to {
+                transform: translateY(150vh);
+                opacity: 0;
+            }
+        }
+
+        @keyframes slideOutLeft {
+            to {
+                transform: translateX(-150vw);
+                opacity: 0;
+            }
+        }
+
+        @keyframes slideOutRight {
+            to {
+                transform: translateX(150vw);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeOutText {
+            to {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+        }
+
+        @keyframes zoomInImage {
+            from {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, -50%) scale(1.5);
+                opacity: 1;
+            }
+        }
+
+        .slide-out-top {
+            animation: slideOutTop 4s ease-in-out forwards;
+        }
+
+        .slide-out-bottom {
+            animation: slideOutBottom 4s ease-in-out forwards;
+        }
+
+        .slide-out-left {
+            animation: slideOutLeft 4s ease-in-out forwards;
+        }
+
+        .slide-out-right {
+            animation: slideOutRight 4s ease-in-out forwards;
+        }
+
+        .fade-out {
+            animation: fadeOutText 4s ease-out forwards;
+        }
+
+        /* Zoom in image container */
+        .zoom-image {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 100vw;
+            height: 100vh;
+            z-index: 200;
+            opacity: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .zoom-image.active {
+            animation: zoomInImage 4s ease-out forwards;
+        }
+
+        .zoom-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* White scroll overlay */
+        .scroll-overlay {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0%;
+            background: #ffffff;
+            z-index: 250;
+            transition: height 0.1s linear;
+            pointer-events: none;
+        }
+
+        .scroll-overlay.active {
+            pointer-events: auto;
+        }
+
+        /* White scroll overlay */
+        .white-scroll-overlay {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #ffffff;
+            z-index: 250;
+            transform: translateY(100%);
+            transition: transform 0.1s ease-out;
+            pointer-events: none;
+        }
+
+        /* Mobile specific zoom animation */
+        @media (max-width: 768px) {
+            @keyframes zoomInImage {
+                from {
+                    transform: translate(-50%, -50%) scale(0);
+                    opacity: 0;
+                }
+                to {
+                    transform: translate(-50%, -50%) scale(1);
+                    opacity: 1;
+                }
+            }
+
+            .zoom-image {
+                width: 100vw;
+                height: 100vh;
+            }
+
+            .zoom-image img {
+                object-fit: cover;
+                object-position: center;
+            }
+        }
+
+        /* White scrolling overlay */
+        .white-overlay {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #ffffff;
+            z-index: 250;
+            transform: translateY(100%);
+            transition: transform 0.1s linear;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 40px;
+            opacity: 0;
+        }
+
+        .white-overlay.visible {
+            opacity: 1;
+        }
+
+        /* Romantic message styling */
+        .love-message {
+            max-width: 700px;
+            text-align: center;
+            line-height: 1.6;
+            font-size: clamp(24px, 3.5vw, 40px);
+            font-weight: 500;
+            font-family: 'Dancing Script', cursive;
+            letter-spacing: 0.5px;
+            word-spacing: 2px;
+            position: relative;
+        }
+
+        .love-message .word {
+            display: inline-block;
+            opacity: 0;
+            margin: 0 0.2em;
+        }
+
+        .love-message .word.written {
+            opacity: 1;
+            animation: fadeInWrite 0.3s ease-in;
+        }
+
+        /* Flower emojis decoration */
+        .flower-emoji {
+            position: absolute;
+            font-size: clamp(30px, 5vw, 50px);
+            opacity: 0;
+            animation: flowerFadeIn 0.8s ease-out forwards;
+        }
+
+        .flower-emoji.top-left {
+            top: -40px;
+            left: -30px;
+        }
+
+        .flower-emoji.top-right {
+            top: -40px;
+            right: -30px;
+        }
+
+        .flower-emoji.bottom-left {
+            bottom: -40px;
+            left: -30px;
+        }
+
+        .flower-emoji.bottom-right {
+            bottom: -40px;
+            right: -30px;
+        }
+
+        .flower-emoji.mid-left {
+            top: 50%;
+            left: -40px;
+            transform: translateY(-50%);
+        }
+
+        .flower-emoji.mid-right {
+            top: 50%;
+            right: -40px;
+            transform: translateY(-50%);
+        }
+
+        @keyframes flowerFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5) rotate(-20deg);
+            }
+            to {
+                opacity: 0.9;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        @keyframes fadeInWrite {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Hand writing cursor */
+        .writing-hand {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            pointer-events: none;
+            z-index: 300;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .writing-hand.active {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .white-overlay {
+                padding: 40px 25px;
+            }
+
+            .love-message {
+                font-size: clamp(20px, 5vw, 28px);
+                line-height: 1.5;
+                word-spacing: 1px;
+            }
+
+            .writing-hand {
+                width: 45px;
+                height: 45px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .white-overlay {
+                padding: 40px 25px;
+            }
+
+            .love-message {
+                font-size: clamp(20px, 5vw, 32px);
+                line-height: 2;
+                word-spacing: 4px;
+            }
+        }
+
+        /* Content section for scrolling */
+        .scroll-content {
+            position: relative;
+            z-index: 300;
+            min-height: 200vh;
+            pointer-events: auto;
+        }
+
+        /* Message container on white background */
+        .message-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 260;
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+            padding: 40px;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .message-container.visible {
+            opacity: 1;
+        }
+
+        .message-text {
+            font-size: clamp(24px, 3vw, 42px);
+            line-height: 1.8;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        .message-text .word {
+            display: inline-block;
+            color: rgba(0, 0, 0, 0.3);
+            transition: color 0.5s ease;
+            margin: 0 4px;
+        }
+
+        .message-text .word.revealed {
+            color: rgba(0, 0, 0, 1);
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .message-container {
+                padding: 20px;
+            }
+
+            .message-text {
+                font-size: clamp(18px, 4vw, 28px);
+                line-height: 1.6;
+            }
+
+            .message-text .word {
+                margin: 0 2px;
+            }
+        }
+
+        /* Subtle parallax effect on scroll */
+        @media (hover: hover) {
+            .floating-img {
+                transition: transform 0.3s ease;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <!-- Floating Images -->
+        <div class="floating-images">
+            <img class="floating-img img-1" src="img/IMG_2080.jpg" alt="Desert landscape">
+            <img class="floating-img img-2" src="img/IMG_2434.JPG" alt="People in white">
+            <img class="floating-img img-3" src="img/IMG_2059.JPG" alt="Pizza">
+            <img class="floating-img img-4" src="img/68ff3c87-584d-4bb3-916d-62e146b1968d 2.JPG" alt="Red fashion">
+            <img class="floating-img img-5" src="img/7a73156a-8158-4487-8fa8-df7773070c17.JPG" alt="Group of women">
+            <img class="floating-img img-6" src="img/e02a6eb3-fc52-48f9-b43f-9269a91d58f1.JPG" alt="Red portrait">
+            <img class="floating-img img-7" src="img/IMG_2638.jpg" alt="Black design">
+            <img class="floating-img img-8" src="img/IMG_2060.JPG" alt="White dessert">
+            <img class="floating-img img-9" src="img/IMG_2638.jpg" alt="Colorful books">
+            <img class="floating-img img-10" src="img/IMG_2634.jpg" alt="Pink book">
+            <img class="floating-img img-11" src="img/IMG_2593.JPG" alt="Shelf">
+            <img class="floating-img img-12" src="img/IMG_2640.jpg" alt="Tech device">
+            <img class="floating-img img-13" src="img/pic3.jpeg" alt="Vertical image">
+        </div>
+
+        <!-- Center Text -->
+        <div class="hero-text">
+            <h1>Will you be my Val<br>Olanike</h1>
+        </div>
+    </section>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-button yes">YES</button>
+        <button class="nav-button no">NO</button>
+    </nav>
+
+    <!-- Zoom in image for YES click -->
+    <div class="zoom-image" id="zoomImage">
+        <img src="img/IMG_2641.jpg" alt="Love">
+    </div>
+
+    <!-- White scrolling overlay -->
+    <div class="white-overlay" id="whiteOverlay">
+        <div class="love-message" id="loveMessage">
+            <span class="flower-emoji top-left">💐</span>
+            <span class="flower-emoji top-right">💐</span>
+            <span class="flower-emoji mid-left">💐</span>
+            <span class="flower-emoji mid-right">💐</span>
+            <span class="flower-emoji bottom-left">💐</span>
+            <span class="flower-emoji bottom-right">💐</span>
+            
+            <span class="word">I</span>
+            <span class="word">find</span>
+            <span class="word">joy</span>
+            <span class="word">in</span>
+            <span class="word">every</span>
+            <span class="word">little</span>
+            <span class="word">thing</span>
+            <span class="word">that</span>
+            <span class="word">makes</span>
+            <span class="word">you</span>
+            <span class="word">smile.</span>
+            <br>
+            <span class="word">Your</span>
+            <span class="word">happiness</span>
+            <span class="word">feels</span>
+            <span class="word">like</span>
+            <span class="word">home</span>
+            <span class="word">to</span>
+            <span class="word">me.</span>
+            <br>
+            <span class="word">Loving</span>
+            <span class="word">you</span>
+            <span class="word">isn't</span>
+            <span class="word">just</span>
+            <span class="word">a</span>
+            <span class="word">feeling</span>
+            <span class="word">it's</span>
+            <span class="word">a</span>
+            <span class="word">choice</span>
+            <span class="word">I</span>
+            <span class="word">make</span>
+            <span class="word">every</span>
+            <span class="word">day,</span>
+            <span class="word">and</span>
+            <span class="word">it's</span>
+            <span class="word">the</span>
+            <span class="word">easiest</span>
+            <span class="word">choice</span>
+            <span class="word">I've</span>
+            <span class="word">ever</span>
+            <span class="word">made.</span>
+            <br>
+            <span class="word">You're</span>
+            <span class="word">not</span>
+            <span class="word">just</span>
+            <span class="word">my</span>
+            <span class="word">Valentine</span>
+            <span class="word">today…</span>
+            <span class="word">you're</span>
+            <span class="word">the</span>
+            <span class="word">one</span>
+            <span class="word">I</span>
+            <span class="word">want</span>
+            <span class="word">to</span>
+            <span class="word">keep</span>
+            <span class="word">choosing,</span>
+            <span class="word">always.</span>
+        </div>
+    </div>
+
+    <!-- Writing hand cursor -->
+    <div class="writing-hand" id="writingHand">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 50 L15 55 L10 50 L15 45 L20 50Z" fill="#FFD9B3" stroke="#000" stroke-width="1"/>
+            <path d="M15 45 L18 30 L22 28 L20 43 L15 45Z" fill="#FFE4CC" stroke="#000" stroke-width="1"/>
+            <path d="M22 28 L35 15 L40 20 L27 33 L22 28Z" fill="#4169E1" stroke="#000" stroke-width="1"/>
+            <path d="M35 15 L37 13 L42 18 L40 20 L35 15Z" fill="#FFD700" stroke="#000" stroke-width="1"/>
+            <line x1="27" y1="33" x2="15" y2="45" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+    </div>
+
+    <!-- Scroll content area -->
+    <div class="scroll-content" id="scrollContent"></div>
+
+    <script>
+        // Subtle parallax effect on mouse move
+        document.addEventListener('mousemove', (e) => {
+            const images = document.querySelectorAll('.floating-img');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+
+            images.forEach((img, index) => {
+                const speed = (index + 1) * 0.5;
+                const moveX = (x - 0.5) * speed * 10;
+                const moveY = (y - 0.5) * speed * 10;
+                img.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
+        });
+
+        // White overlay scroll control
+        let yesClicked = false;
+        const whiteOverlay = document.getElementById('whiteOverlay');
+        const scrollContent = document.getElementById('scrollContent');
+
+        // Enable scrolling after YES animation completes
+        let flowersShown = false;
+        
+        window.addEventListener('scroll', () => {
+            if (yesClicked) {
+                // Calculate scroll percentage
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const maxScroll = document.body.scrollHeight - window.innerHeight;
+                const scrollPercent = Math.min(scrollTop / maxScroll, 1);
+
+                // Move white overlay up based on scroll
+                const translateY = 100 - (scrollPercent * 100);
+                whiteOverlay.style.transform = `translateY(${translateY}%)`;
+
+                // Show overlay when it starts appearing
+                if (scrollPercent > 0) {
+                    whiteOverlay.classList.add('visible');
+                    
+                    // Show flowers once when overlay appears
+                    if (!flowersShown) {
+                        flowersShown = true;
+                        const flowers = document.querySelectorAll('.flower-emoji');
+                        flowers.forEach((flower, index) => {
+                            setTimeout(() => {
+                                flower.style.opacity = '0.9';
+                                flower.style.animation = 'flowerFadeIn 0.8s ease-out forwards';
+                            }, index * 100);
+                        });
+                    }
+                }
+
+                // Animate words being written progressively
+                const words = document.querySelectorAll('.love-message .word');
+                const wordsToWrite = Math.floor(scrollPercent * words.length);
+                
+                words.forEach((word, index) => {
+                    if (index <= wordsToWrite) {
+                        if (!word.classList.contains('written')) {
+                            word.classList.add('written');
+                            
+                            // Position hand near the word being written
+                            const rect = word.getBoundingClientRect();
+                            const hand = document.getElementById('writingHand');
+                            hand.style.left = (rect.right + 10) + 'px';
+                            hand.style.top = (rect.top - 10) + 'px';
+                            hand.classList.add('active');
+                            
+                            // Hide hand after a moment
+                            setTimeout(() => {
+                                hand.classList.remove('active');
+                            }, 300);
+                        }
+                    }
+                });
+            }
+        });
+
+        // Button click handlers
+        const yesButton = document.querySelector('.nav-button.yes');
+        const noButton = document.querySelector('.nav-button.no');
+        let noClickCount = 0;
+
+        // YES button - celebrate!
+        yesButton.addEventListener('click', () => {
+            yesClicked = true;
+
+            // Get all images and classify them by position
+            const images = document.querySelectorAll('.floating-img');
+            const heroText = document.querySelector('.hero-text');
+            const zoomImage = document.getElementById('zoomImage');
+            const navbar = document.querySelector('.bottom-nav');
+
+            images.forEach((img, index) => {
+                const rect = img.getBoundingClientRect();
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+                const imgCenterX = rect.left + rect.width / 2;
+                const imgCenterY = rect.top + rect.height / 2;
+
+                // Determine direction based on position
+                if (imgCenterY < centerY && Math.abs(imgCenterX - centerX) < window.innerWidth * 0.3) {
+                    // Top images
+                    img.classList.add('slide-out-top');
+                } else if (imgCenterY > centerY && Math.abs(imgCenterX - centerX) < window.innerWidth * 0.3) {
+                    // Bottom images
+                    img.classList.add('slide-out-bottom');
+                } else if (imgCenterX < centerX) {
+                    // Left images
+                    img.classList.add('slide-out-left');
+                } else {
+                    // Right images
+                    img.classList.add('slide-out-right');
+                }
+            });
+
+            // Fade out the text
+            heroText.classList.add('fade-out');
+
+            // Fade out navbar
+            navbar.style.transition = 'opacity 2s ease-out';
+            navbar.style.opacity = '0';
+
+            // Zoom in the love image after a slight delay
+            setTimeout(() => {
+                zoomImage.classList.add('active');
+            }, 500);
+
+            // Enable scrolling after animation completes
+            setTimeout(() => {
+                document.body.style.height = '300vh'; // Make page scrollable
+            }, 4500);
+        });
+
+        // NO button - progressive messages
+        noButton.addEventListener('click', () => {
+            noClickCount++;
+
+            // Check if mobile view
+            const isMobile = window.innerWidth <= 768;
+
+            if (noClickCount === 1) {
+                // First click
+                noButton.textContent = 'Are you sure my love 🥺';
+                noButton.style.flexGrow = '2';
+                yesButton.style.flexGrow = '0.8';
+                noButton.style.fontSize = isMobile ? '8px' : '12px';
+            } else if (noClickCount === 2) {
+                // Second click
+                noButton.textContent = 'Abeg na please baby 🥺';
+                noButton.style.flexGrow = '3';
+                yesButton.style.flexGrow = '0.6';
+                noButton.style.fontSize = isMobile ? '7px' : '11px';
+            } else if (noClickCount === 3) {
+                // Third click
+                noButton.textContent = 'Jowo ife mi 🥺';
+                noButton.style.flexGrow = '4';
+                yesButton.style.flexGrow = '0.4';
+                noButton.style.fontSize = isMobile ? '8px' : '10px';
+            } else {
+                // Fourth click - YES takes over completely
+                noButton.style.display = 'none';
+                yesButton.style.flexGrow = '1';
+                yesButton.textContent = 'YES (you no get choice ooo 😂)';
+                yesButton.style.fontSize = isMobile ? '9px' : '13px';
+                yesButton.style.textTransform = 'none';
+                
+                // User must click YES button manually - no auto-trigger
+            }
+        });
+    </script>
+</body>
+</html>
