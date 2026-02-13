@@ -721,7 +721,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <!-- Floating Images -->
-        <div class="floating-images">
+       <div class="floating-images">
             <img class="floating-img img-1" src="img/IMG_2080.jpg" alt="Desert landscape">
             <img class="floating-img img-2" src="img/IMG_2434.JPG" alt="People in white">
             <img class="floating-img img-3" src="img/IMG_2059.JPG" alt="Pizza">
@@ -827,6 +827,11 @@
     <!-- Scroll content area -->
     <div class="scroll-content" id="scrollContent"></div>
 
+    <!-- Background Music -->
+    <audio id="backgroundMusic" loop>
+        <source src="WhatsApp.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
         // Subtle parallax effect on mouse move
         document.addEventListener('mousemove', (e) => {
@@ -900,6 +905,12 @@
         // YES button - celebrate!
         yesButton.addEventListener('click', () => {
             yesClicked = true;
+
+            // Play romantic background music
+            const music = document.getElementById('backgroundMusic');
+            music.play().catch(error => {
+                console.log('Music autoplay prevented:', error);
+            });
 
             // Get all images and classify them by position
             const images = document.querySelectorAll('.floating-img');
