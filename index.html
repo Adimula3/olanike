@@ -19,6 +19,13 @@
             background: #f5f5f5;
             color: #000;
             overflow-x: hidden;
+            overflow-y: hidden;
+            height: 100vh;
+        }
+
+        body.scrollable {
+            overflow-y: auto;
+            height: auto;
         }
 
         /* Hero Section */
@@ -37,7 +44,6 @@
             text-align: center;
             z-index: 100;
             position: relative;
-            font-family: 'Dancing Script', cursive;
         }
 
         .hero-text h1 {
@@ -517,13 +523,14 @@
             background: #ffffff;
             z-index: 250;
             transform: translateY(100%);
-            transition: transform 0.1s linear;
+            transition: none;
             pointer-events: none;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 60px 40px;
             opacity: 0;
+            will-change: transform;
         }
 
         .white-overlay.visible {
@@ -616,21 +623,6 @@
             }
         }
 
-        /* Hand writing cursor */
-        .writing-hand {
-            position: fixed;
-            width: 60px;
-            height: 60px;
-            pointer-events: none;
-            z-index: 300;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .writing-hand.active {
-            opacity: 1;
-        }
-
         @media (max-width: 768px) {
             .white-overlay {
                 padding: 40px 25px;
@@ -640,11 +632,6 @@
                 font-size: clamp(20px, 5vw, 28px);
                 line-height: 1.5;
                 word-spacing: 1px;
-            }
-
-            .writing-hand {
-                width: 45px;
-                height: 45px;
             }
         }
 
@@ -836,17 +823,6 @@
         </div>
     </div>
 
-    <!-- Writing hand cursor -->
-    <div class="writing-hand" id="writingHand">
-        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 50 L15 55 L10 50 L15 45 L20 50Z" fill="#FFD9B3" stroke="#000" stroke-width="1"/>
-            <path d="M15 45 L18 30 L22 28 L20 43 L15 45Z" fill="#FFE4CC" stroke="#000" stroke-width="1"/>
-            <path d="M22 28 L35 15 L40 20 L27 33 L22 28Z" fill="#4169E1" stroke="#000" stroke-width="1"/>
-            <path d="M35 15 L37 13 L42 18 L40 20 L35 15Z" fill="#FFD700" stroke="#000" stroke-width="1"/>
-            <line x1="27" y1="33" x2="15" y2="45" stroke="#000" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-    </div>
-
     <!-- Scroll content area -->
     <div class="scroll-content" id="scrollContent"></div>
 
@@ -880,9 +856,11 @@
                 const maxScroll = document.body.scrollHeight - window.innerHeight;
                 const scrollPercent = Math.min(scrollTop / maxScroll, 1);
 
-                // Move white overlay up based on scroll
-                const translateY = 100 - (scrollPercent * 100);
-                whiteOverlay.style.transform = `translateY(${translateY}%)`;
+                // Move white overlay up based on scroll - smoother with requestAnimationFrame
+                requestAnimationFrame(() => {
+                    const translateY = 100 - (scrollPercent * 100);
+                    whiteOverlay.style.transform = `translateY(${translateY}%)`;
+                });
 
                 // Show overlay when it starts appearing
                 if (scrollPercent > 0) {
@@ -901,27 +879,13 @@
                     }
                 }
 
-                // Animate words being written progressively
+                // Animate words being written progressively - NO HAND, just reveal
                 const words = document.querySelectorAll('.love-message .word');
                 const wordsToWrite = Math.floor(scrollPercent * words.length);
                 
                 words.forEach((word, index) => {
                     if (index <= wordsToWrite) {
-                        if (!word.classList.contains('written')) {
-                            word.classList.add('written');
-                            
-                            // Position hand near the word being written
-                            const rect = word.getBoundingClientRect();
-                            const hand = document.getElementById('writingHand');
-                            hand.style.left = (rect.right + 10) + 'px';
-                            hand.style.top = (rect.top - 10) + 'px';
-                            hand.classList.add('active');
-                            
-                            // Hide hand after a moment
-                            setTimeout(() => {
-                                hand.classList.remove('active');
-                            }, 300);
-                        }
+                        word.classList.add('written');
                     }
                 });
             }
@@ -979,6 +943,7 @@
 
             // Enable scrolling after animation completes
             setTimeout(() => {
+                document.body.classList.add('scrollable');
                 document.body.style.height = '300vh'; // Make page scrollable
             }, 4500);
         });
