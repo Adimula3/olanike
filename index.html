@@ -624,6 +624,56 @@
             }
         }
 
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            z-index: 260;
+            opacity: 0;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            transition: opacity 0.5s ease;
+        }
+
+        .scroll-indicator.visible {
+            opacity: 1;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .scroll-arrow {
+            width: 30px;
+            height: 30px;
+            border-right: 3px solid #fff;
+            border-bottom: 3px solid #fff;
+            transform: rotate(45deg);
+            filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.3));
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
         @media (max-width: 768px) {
             .white-overlay {
                 padding: 40px 25px;
@@ -633,6 +683,20 @@
                 font-size: clamp(20px, 5vw, 28px);
                 line-height: 1.5;
                 word-spacing: 1px;
+            }
+
+            .scroll-indicator {
+                bottom: 30px;
+                right: 30px;
+            }
+
+            .scroll-indicator-text {
+                font-size: 12px;
+            }
+
+            .scroll-arrow {
+                width: 25px;
+                height: 25px;
             }
         }
 
@@ -721,7 +785,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <!-- Floating Images -->
-       <div class="floating-images">
+        <div class="floating-images">
             <img class="floating-img img-1" src="img/IMG_2080.jpg" alt="Desert landscape">
             <img class="floating-img img-2" src="img/IMG_2434.JPG" alt="People in white">
             <img class="floating-img img-3" src="img/IMG_2059.JPG" alt="Pizza">
@@ -827,6 +891,12 @@
     <!-- Scroll content area -->
     <div class="scroll-content" id="scrollContent"></div>
 
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator" id="scrollIndicator">
+        <span class="scroll-indicator-text">Scroll</span>
+        <div class="scroll-arrow"></div>
+    </div>
+
     <!-- Background Music -->
     <audio id="backgroundMusic" loop>
         <source src="WhatsApp.mp3" type="audio/mpeg">
@@ -854,9 +924,15 @@
 
         // Enable scrolling after YES animation completes
         let flowersShown = false;
+        const scrollIndicator = document.getElementById('scrollIndicator');
         
         window.addEventListener('scroll', () => {
             if (yesClicked) {
+                // Hide scroll indicator once user starts scrolling
+                if (scrollIndicator.classList.contains('visible')) {
+                    scrollIndicator.classList.remove('visible');
+                }
+
                 // Calculate scroll percentage
                 const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
                 const maxScroll = document.body.scrollHeight - window.innerHeight;
@@ -957,6 +1033,10 @@
             setTimeout(() => {
                 document.body.classList.add('scrollable');
                 document.body.style.height = '300vh'; // Make page scrollable
+                
+                // Show scroll indicator
+                const scrollIndicator = document.getElementById('scrollIndicator');
+                scrollIndicator.classList.add('visible');
             }, 4500);
         });
 
